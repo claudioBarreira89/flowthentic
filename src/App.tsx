@@ -1,7 +1,10 @@
-import { SafeAreaView, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import Auth from "./screens/Auth";
 import { useCurrentUser } from "./hooks/useCurrentUser";
 import Core from "./screens/Core";
+
+import { ThemeProvider } from "@rneui/themed";
+import theme, { colors } from "./styles/theme";
 
 export default function App() {
   // Determine whether user is logged in
@@ -10,10 +13,19 @@ export default function App() {
   const isLoggedIn = useCurrentUser()!!;
 
   return (
-    <View style={{ backgroundColor: "#f0f0f0" }}>
-      <SafeAreaView style={{ height: "100%" }}>
-        {isLoggedIn ? <Core /> : <Auth />}
-      </SafeAreaView>
-    </View>
+    <ThemeProvider theme={theme}>
+      <View style={styles.container}>
+        <SafeAreaView style={{ height: "100%" }}>
+          {isLoggedIn ? <Core /> : <Auth />}
+        </SafeAreaView>
+      </View>
+    </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    color: "#fff",
+    backgroundColor: colors.background,
+  },
+});

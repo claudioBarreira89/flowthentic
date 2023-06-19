@@ -15,6 +15,7 @@ import { useState } from "react";
 import { CompositeSignature } from "@onflow/typedefs";
 import getFoo from "../../cadence/scripts/get-foo.cdc";
 import setFoo from "../../cadence/transactions/set-foo.cdc";
+import { Button } from "../ui";
 
 export default function Core() {
   // Hook to obtain information about the current user
@@ -192,13 +193,9 @@ export default function Core() {
 
         <View style={{ gap: 10, marginTop: 10 }}>
           {commands.map((command) => (
-            <TouchableOpacity
-              key={command.name}
-              onPress={command.onPress}
-              style={styles.button}
-            >
+            <Button onPress={command.onPress}>
               <Text style={{ fontSize: 16 }}>{command.name}</Text>
-            </TouchableOpacity>
+            </Button>
           ))}
         </View>
       </ScrollView>
