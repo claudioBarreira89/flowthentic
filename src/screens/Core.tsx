@@ -8,14 +8,21 @@ import {
   TextInput,
   Modal,
   Alert,
+  SafeAreaView,
+  Image,
 } from "react-native";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useState } from "react";
 import { CompositeSignature } from "@onflow/typedefs";
-import getFoo from "../../cadence/scripts/get-foo.cdc";
-import setFoo from "../../cadence/transactions/set-foo.cdc";
+
 import { Button } from "../ui";
+import { LinearGradient } from "expo-linear-gradient";
+import { Defs, RadialGradient, Rect, Stop, Svg } from "react-native-svg";
+import { colors } from "../styles/theme";
+import { Avatar, Card, Icon, color } from "@rneui/base";
+import { truncateAddress } from "../utils";
+import { IdentityIllustration } from "../../assets";
 
 export default function Core() {
   // Hook to obtain information about the current user
@@ -28,133 +35,42 @@ export default function Core() {
   // Commands to be displayed in the UI
   const commands = [
     {
-      name: "Execute Transaction",
-      onPress: () => setModalVisible(true),
-    },
-    {
-      name: "Execute Script",
-      onPress: () => {
-        fcl
-          .query({
-            cadence: getFoo,
-            args: (arg, t) => [arg(fcl.withPrefix(user?.address), t.Address)],
-          })
-          .then((res) => {
-            Alert.alert("Script executed", `The value of foo is: ${res}`);
-          });
-      },
-    },
-    {
-      name: "Sign User Message",
-      onPress: () => {
-        fcl.currentUser
-          .signUserMessage("12345678")
-          .then((signatures: CompositeSignature[]) => {
-            Alert.alert(
-              "User Signature Success",
-              signatures
-                .map(
-                  (sig) =>
-                    `addr: ${sig.addr}, keyId: ${sig.keyId}, message: 0x12345678\n\n${sig.signature}`
-                )
-                .join("\n\n")
-            );
-          })
-          .catch((err) => {
-            Alert.alert("User Signature Failed");
-          });
-      },
-    },
-    {
-      name: "Get Latest Block",
-      onPress: () =>
-        fcl
-          .block()
-          .then((block) => Alert.alert("Block", JSON.stringify(block))),
-    },
-    {
       name: "Log Out",
       onPress: () => fcl.unauthenticate(),
     },
   ];
 
-  const styles = StyleSheet.create({
-    scrollView: {
-      padding: 20,
-      flex: 1,
-      flexDirection: "column",
-    },
-    button: {
-      width: "100%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 15,
-      borderRadius: 10,
-      backgroundColor: "white",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    text: {
-      fontSize: 16,
-      fontWeight: "bold",
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22,
-      backgroundColor: "rgba(0,0,0,0.5)",
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-      width: 300,
-    },
-    buttonModal: {
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2,
-    },
-    buttonCancel: {
-      backgroundColor: "red",
-    },
-    buttonSend: {
-      backgroundColor: "#2196F3",
-    },
-    textStyle: {
-      color: "white",
-      fontWeight: "bold",
-      textAlign: "center",
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center",
-      fontWeight: "bold",
-    },
-  });
-
   return (
     <>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.account}
+          onPress={() => fcl.unauthenticate()}
+        >
+          <LinearGradient
+            style={styles.buttonGradient}
+            colors={[colors.primary, colors.secondary]}
+            start={[0, 0]}
+            end={[1, 0]}
+          >
+            <Avatar
+              rounded
+              icon={{
+                name: "user",
+                type: "font-awesome",
+                color: colors.secondary,
+              }}
+              overlayContainerStyle={{ backgroundColor: "white" }}
+            />
+            <Text style={{ fontSize: 14, marginLeft: 10, paddingRight: 10 }}>
+              {user?.address ? truncateAddress(user?.address) : "Loading..."}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView style={styles.scrollView}>
-        <View
+        {/* <View
           style={{
             padding: 15,
             borderRadius: 10,
@@ -173,6 +89,7 @@ export default function Core() {
           <Text style={{ fontSize: 20, marginBottom: 10, fontWeight: "bold" }}>
             Your Account
           </Text>
+
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -189,62 +106,112 @@ export default function Core() {
               {user ? `${user.balance / 10 ** 8} FLOW` : "Loading..."}
             </Text>
           </View>
-        </View>
 
-        <View style={{ gap: 10, marginTop: 10 }}>
-          {commands.map((command) => (
-            <Button onPress={command.onPress}>
-              <Text style={{ fontSize: 16 }}>{command.name}</Text>
+          <View style={styles.logoutButton}>
+            <Button onPress={() => fcl.unauthenticate()}>
+              <Text style={{ fontSize: 16 }}>Logout</Text>
             </Button>
-          ))}
-        </View>
-      </ScrollView>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>What to set HelloWorld.foo to?</Text>
-            <TextInput
-              style={{
-                width: "100%",
-                height: 40,
-                marginBottom: 10,
-                borderColor: "white",
-                borderWidth: 1,
-                borderRadius: 5,
-              }}
-              onChangeText={setFooInput}
-              value={fooInput}
-            />
-            <View style={{ flexDirection: "row", gap: 5 }}>
-              <Pressable
-                style={[styles.buttonModal, styles.buttonCancel, { flex: 1 }]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.buttonModal, styles.buttonSend, { flex: 1 }]}
-                onPress={async () => {
-                  fcl.mutate({
-                    cadence: setFoo,
-                    args: (arg, t) => [arg(fooInput, t.String)],
-                    limit: 999,
-                  });
+          </View>
+        </View> */}
 
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textStyle}>Send TX</Text>
-              </Pressable>
+        <View>
+          <View style={styles.hero}>
+            <Text style={styles.title}>Flowthentic</Text>
+            <Text style={styles.subTitle}>
+              Decentralized Identity Verification
+            </Text>
+          </View>
+
+          <View style={styles.verificationStatus}>
+            <View style={{ height: 200, marginBottom: 60 }}>
+              <IdentityIllustration color={colors.primary} />
             </View>
+
+            {/* <Text style={styles.text}>Not verified</Text> */}
+          </View>
+
+          <View>
+            <Text style={styles.text}>
+              Embrace the future of secure digital identity. Click below to
+              begin your journey
+            </Text>
+            <Button>
+              <Text style={styles.buttonText}>
+                Start your verification here!
+              </Text>
+            </Button>
           </View>
         </View>
-      </Modal>
+      </ScrollView>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  // HEADER
+  header: {
+    width: "100%",
+    padding: 20,
+  },
+  account: {
+    alignSelf: "flex-end",
+    width: "auto",
+    borderRadius: 40,
+    overflow: "hidden",
+  },
+  buttonGradient: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: "100%",
+    padding: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  scrollView: {
+    padding: 20,
+    flex: 1,
+    flexDirection: "column",
+  },
+  // HERO
+  hero: {
+    marginTop: 10,
+    marginBottom: 40,
+  },
+  title: {
+    color: colors.primary,
+    fontWeight: "bold",
+    fontSize: 45,
+    marginBottom: 5,
+  },
+  subTitle: {
+    lineHeight: 22,
+    fontSize: 20,
+    color: "white",
+  },
+  logoutButton: {
+    marginTop: 10,
+  },
+  // BODY
+  verificationStatus: {
+    marginBottom: 20,
+    gap: 20,
+  },
+
+  text: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: "white",
+    marginBottom: 20,
+  },
+  buttonText: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});

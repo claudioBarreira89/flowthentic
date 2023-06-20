@@ -24,7 +24,7 @@ const Button = ({
 const styles = StyleSheet.create({
   button: {
     width: "100%",
-    borderRadius: 10,
+    borderRadius: 40,
     overflow: "hidden",
   },
   buttonGradient: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    padding: 12,
+    padding: 15,
 
     shadowColor: "#000",
     shadowOffset: {
