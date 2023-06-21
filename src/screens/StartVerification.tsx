@@ -23,8 +23,11 @@ import { colors } from "../styles/theme";
 import { Avatar, Card, Icon, color } from "@rneui/base";
 import { truncateAddress } from "../utils";
 import { IdentityIllustration } from "../../assets";
+import { useHeaderHeight } from "@react-navigation/elements";
 
-export default function Core() {
+export default function StartVerification() {
+  const headerHeight = useHeaderHeight();
+
   // Hook to obtain information about the current user
   const user = useCurrentUser();
   // Determines whether modal for transaction arguments is visible
@@ -41,36 +44,39 @@ export default function Core() {
   ];
 
   return (
-    <>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.account}
-          onPress={() => fcl.unauthenticate()}
-        >
-          <LinearGradient
-            style={styles.buttonGradient}
-            colors={[colors.primary, colors.secondary]}
-            start={[0, 0]}
-            end={[1, 0]}
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={{
+        paddingTop: headerHeight,
+      }}
+    >
+      {/* <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.account}
+            onPress={() => fcl.unauthenticate()}
           >
-            <Avatar
-              rounded
-              icon={{
-                name: "user",
-                type: "font-awesome",
-                color: colors.secondary,
-              }}
-              overlayContainerStyle={{ backgroundColor: "white" }}
-            />
-            <Text style={{ fontSize: 14, marginLeft: 10, paddingRight: 10 }}>
-              {user?.address ? truncateAddress(user?.address) : "Loading..."}
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView style={styles.scrollView}>
-        {/* <View
+            <LinearGradient
+              style={styles.buttonGradient}
+              colors={[colors.primary, colors.secondary]}
+              start={[0, 0]}
+              end={[1, 0]}
+            >
+              <Avatar
+                rounded
+                icon={{
+                  name: "user",
+                  type: "font-awesome",
+                  color: colors.secondary,
+                }}
+                overlayContainerStyle={{ backgroundColor: "white" }}
+              />
+              <Text style={{ fontSize: 14, marginLeft: 10, paddingRight: 10 }}>
+                {user?.address ? truncateAddress(user?.address) : "Loading..."}
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View> */}
+      {/* <View
           style={{
             padding: 15,
             borderRadius: 10,
@@ -114,67 +120,44 @@ export default function Core() {
           </View>
         </View> */}
 
-        <View>
-          <View style={styles.hero}>
-            <Text style={styles.title}>Flowthentic</Text>
-            <Text style={styles.subTitle}>
-              Decentralized Identity Verification
-            </Text>
-          </View>
-
-          <View style={styles.verificationStatus}>
-            <View style={{ height: 200, marginBottom: 60 }}>
-              <IdentityIllustration color={colors.primary} />
-            </View>
-
-            {/* <Text style={styles.text}>Not verified</Text> */}
-          </View>
-
-          <View>
-            <Text style={styles.text}>
-              Embrace the future of secure digital identity. Click below to
-              begin your journey
-            </Text>
-            <Button>
-              <Text style={styles.buttonText}>
-                Start your verification here!
-              </Text>
-            </Button>
-          </View>
+      <View>
+        <View style={styles.hero}>
+          <Text style={styles.title}>Flowthentic</Text>
+          <Text style={styles.subTitle}>
+            Decentralized Identity Verification
+          </Text>
         </View>
-      </ScrollView>
-    </>
+
+        <View style={styles.verificationStatus}>
+          <View style={{ height: 200, marginBottom: 60 }}>
+            <IdentityIllustration color={colors.primary} />
+          </View>
+
+          {/* <Text style={styles.text}>Not verified</Text> */}
+        </View>
+
+        <View>
+          <Text style={styles.text}>
+            Embrace the future of secure digital identity. Click below to begin
+            your journey
+          </Text>
+          <Button>
+            <Text style={styles.buttonText}>Start your verification here!</Text>
+          </Button>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  // HEADER
-  header: {
-    width: "100%",
-    padding: 20,
-  },
-  account: {
-    alignSelf: "flex-end",
-    width: "auto",
-    borderRadius: 40,
-    overflow: "hidden",
-  },
-  buttonGradient: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "100%",
-    padding: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 5,
+  container: {
+    height: "100%",
+    backgroundColor: colors.background,
   },
   scrollView: {
+    height: "100%",
+    backgroundColor: colors.background,
     padding: 20,
     flex: 1,
     flexDirection: "column",

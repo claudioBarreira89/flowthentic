@@ -5,8 +5,12 @@ import NoWalletsView from "../components/NoWalletsView";
 import WalletServiceCard from "../components/WalletServiceCard";
 import WalletDiscoveryWrapper from "../components/WalletDiscoveryWrapper";
 import { Logo } from "../../assets";
+import { colors } from "../styles/theme";
+import { useNavigation } from "@react-navigation/native";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useEffect } from "react";
 
-export default function Auth() {
+export default function Auth({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.logoSection}>
@@ -32,6 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around",
     padding: 15,
+    backgroundColor: colors.background,
   },
   logoSection: {
     flex: 1,
