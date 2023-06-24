@@ -9,6 +9,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { BlurView } from "expo-blur";
 import UserAccountButton from "./components/UserAccountButton";
+import Verification from "./screens/Verification";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,19 +27,21 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{}}>
+        <Stack.Navigator
+          screenOptions={{
+            title: null,
+            headerRight: () => <UserAccountButton />,
+            headerTransparent: true,
+            headerStyle: { backgroundColor: colors.background },
+          }}
+        >
           {isLoggedIn ? (
             <>
               <Stack.Screen
                 name="StartVerification"
                 component={StartVerification}
-                options={{
-                  title: null,
-                  headerLeft: () => <UserAccountButton />,
-                  headerTransparent: true,
-                  headerStyle: { backgroundColor: colors.background },
-                }}
               />
+              <Stack.Screen name="Verification" component={Verification} />
             </>
           ) : (
             <>

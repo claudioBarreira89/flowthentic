@@ -16,6 +16,9 @@ const UserAccountButton = () => {
       onPress={() => fcl.unauthenticate()}
     >
       <View style={styles.buttonGradient}>
+        <Text style={styles.text}>
+          {user?.address ? truncateAddress(user?.address) : "Loading..."}
+        </Text>
         <Avatar
           rounded
           icon={{
@@ -25,9 +28,6 @@ const UserAccountButton = () => {
           }}
           overlayContainerStyle={{ backgroundColor: "white" }}
         />
-        <Text style={styles.text}>
-          {user?.address ? truncateAddress(user?.address) : "Loading..."}
-        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   text: {
     color: colors.primary,
     fontSize: 14,
-    marginLeft: 10,
+    marginRight: 10,
   },
 });
 
