@@ -15,7 +15,7 @@ export default function StartVerification({ navigation }) {
         paddingTop: headerHeight,
       }}
     >
-      <View>
+      <View style={styles.container}>
         <View style={styles.hero}>
           <Text style={styles.title}>Flowthentic</Text>
           <Text style={styles.subTitle}>
@@ -29,7 +29,7 @@ export default function StartVerification({ navigation }) {
           </View>
         </View>
 
-        <View>
+        <View style={styles.startButton}>
           <Text style={styles.text}>
             Embrace the future of secure digital identity. Click below to begin
             your journey
@@ -44,16 +44,15 @@ export default function StartVerification({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: "100%",
-    backgroundColor: colors.background,
-  },
   scrollView: {
     height: "100%",
     backgroundColor: colors.background,
     padding: 20,
     flex: 1,
     flexDirection: "column",
+  },
+  container: {
+    height: "100%",
   },
   // HERO
   hero: {
@@ -79,6 +78,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 20,
   },
+
+  startButton: {},
 
   text: {
     fontSize: 16,

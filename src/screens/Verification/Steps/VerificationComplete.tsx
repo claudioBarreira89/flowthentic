@@ -1,11 +1,13 @@
-import { View, StyleSheet, Image, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { Text } from "react-native";
 import { Button } from "../../../ui";
 import { useVerificationState } from "../VerificationContext";
 import { colors } from "../../../styles/theme";
 import { SuccessIllustration } from "../../../../assets";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 
 const VerificationComplete: React.FC = () => {
+  const navigation = useNavigation();
   const { setCurrentStep } = useVerificationState();
 
   return (
@@ -21,9 +23,16 @@ const VerificationComplete: React.FC = () => {
       </View>
 
       <Button
-        onPress={() => setCurrentStep(0)} // Reset the process
+        onPress={() => {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: "Profile" }],
+            })
+          );
+        }}
       >
-        Start Over
+        Done
       </Button>
     </ScrollView>
   );

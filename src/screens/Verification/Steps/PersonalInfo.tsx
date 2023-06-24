@@ -7,17 +7,14 @@ import { Input } from "@rneui/base";
 import { Text } from "react-native";
 
 const PersonalInfo: React.FC = () => {
-  const { currentStep, setCurrentStep } = useVerificationState();
+  const {
+    currentStep,
+    setCurrentStep,
+    verificationState,
+    setVerificationState,
+  } = useVerificationState();
 
-  const [name, setName] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = () => {
-    // Here you can handle the form submission,
-    // for example, validate the input, store the data, etc.
-    console.log({ name, birthDate, email });
-  };
+  const { name, email } = verificationState;
 
   return (
     <ScrollView style={styles.container}>
@@ -31,19 +28,23 @@ const PersonalInfo: React.FC = () => {
         <Input
           label="Name"
           value={name}
-          onChangeText={setName}
+          onChangeText={(value) =>
+            setVerificationState((state) => ({ ...state, name: value }))
+          }
           style={styles.input}
         />
         <Input
           label="Email"
           value={email}
-          onChangeText={setEmail}
-          // Add this if you want to use the email keyboard
+          onChangeText={(value) =>
+            setVerificationState((state) => ({ ...state, email: value }))
+          }
           keyboardType="email-address"
           style={styles.input}
         />
       </View>
       <Button
+        disabled={!name || !email}
         style={styles.button}
         onPress={() => setCurrentStep(currentStep + 1)}
       >

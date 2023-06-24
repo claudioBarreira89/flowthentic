@@ -10,20 +10,29 @@ import VerificationComplete from "./VerificationComplete";
 import { colors } from "../../../styles/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
+import { useCurrentUser } from "../../../hooks/useCurrentUser";
+import { Account } from "@onflow/typedefs";
 
-const steps = [
-  { title: "Personal information", Component: PersonalInfo },
-  // { title: "Email verification", Component: EmailVerification },
-  { title: "Face Idenfitication", Component: FaceIdentification },
-  { title: "Confirm details", Component: ConfirmDetails },
-  { title: "Verification complete", Component: VerificationComplete },
-];
+export type Steps = {
+  title: string;
+  Component: (props: { user?: Account }) => JSX.Element;
+};
 
 const Steps: React.FC = () => {
+  const user = useCurrentUser();
   const { currentStep } = useVerificationState();
+
+  const steps: Steps[] = [
+    { title: "Personal information", Component: PersonalInfo },
+    // { title: "Email verification", Component: EmailVerification },
+    // { title: "Face Idenfitication", Component: FaceIdentification },
+    { title: "Confirm details", Component: ConfirmDetails },
+    { title: "Verification complete", Component: VerificationComplete },
+  ];
 
   const { Component, title } = steps[currentStep];
 
+  const props = { user };
   return (
     <View style={styles.container}>
       <MaskedView
@@ -43,7 +52,7 @@ const Steps: React.FC = () => {
         color={colors.primary}
         style={styles.progress}
       />
-      <Component />
+      <Component {...props} />
     </View>
   );
 };
@@ -61,6 +70,7 @@ const styles = StyleSheet.create({
   progress: {
     marginTop: 16,
     backgroundColor: colors.backgroundDarker,
+    borderRadius: 40,
   },
 });
 

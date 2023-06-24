@@ -1,15 +1,39 @@
-import { colors } from "../../../styles/theme";
+import { useCallback } from "react";
 import { Button } from "../../../ui";
 import { useVerificationState } from "../VerificationContext";
-
+import sha256 from "crypto-js/sha256";
 import { ScrollView, StyleSheet, View, Image } from "react-native";
 import { Text } from "react-native";
+import * as fcl from "@onflow/fcl/dist/fcl-react-native";
+import setHashedData from "../../../../cadence/transactions/set-hashed-data.cdc";
 
-const ConfirmDetails: React.FC = () => {
+const ConfirmDetails: React.FC<any> = ({ user }) => {
   const { currentStep, setCurrentStep, verificationState } =
     useVerificationState();
 
   const { name, birthDate, email, image } = verificationState;
+
+  const onConfirm = useCallback(async () => {
+    const userData = { name, email };
+
+    const userDataString = JSON.stringify(userData);
+    const userDataHash = sha256(userDataString).toString();
+
+    try {
+      await fcl.mutate({
+        cadence: setHashedData,
+        args: (arg, t) => [
+          arg(user.address, t.String),
+          arg(userDataHash, t.String),
+        ],
+        limit: 999,
+      });
+
+      setCurrentStep(currentStep + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -41,9 +65,7 @@ const ConfirmDetails: React.FC = () => {
         </View>
       </View>
 
-      <Button onPress={() => setCurrentStep(currentStep + 1)}>
-        Confirm and Proceed
-      </Button>
+      <Button onPress={onConfirm}>Confirm and Proceed</Button>
     </ScrollView>
   );
 };

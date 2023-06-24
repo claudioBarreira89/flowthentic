@@ -16,9 +16,9 @@ export function useCurrentUser() {
   }, [error]);
 
   useEffect(() => {
-    const unsubscribe = fcl.currentUser().subscribe((user) => {
-      if (user?.loggedIn) {
-        setUser(user);
+    const unsubscribe = fcl.currentUser().subscribe((account) => {
+      if (account?.loggedIn) {
+        setUser(account);
       } else {
         setUser(null);
       }

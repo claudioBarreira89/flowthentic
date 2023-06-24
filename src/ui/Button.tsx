@@ -4,16 +4,22 @@ import { colors } from "../styles/theme";
 
 const Button = ({
   type = "primary",
+  disabled,
   children,
   style,
   onPress,
 }: {
   type?: string;
+  disabled?: boolean;
   children?: any;
   style?: any;
   onPress?: () => void;
 }) => (
-  <TouchableOpacity style={{ ...styles.button, ...style }} onPress={onPress}>
+  <TouchableOpacity
+    style={{ ...styles.button, ...style, ...(disabled && styles.disabled) }}
+    onPress={onPress}
+    disabled={disabled}
+  >
     <LinearGradient
       style={styles.buttonGradient}
       {...(type === "primary" && {
@@ -41,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    padding: 10,
+    padding: 15,
 
     shadowColor: "#000",
     shadowOffset: {
@@ -55,6 +61,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  disabled: {
+    opacity: 0.5,
   },
 });
 
