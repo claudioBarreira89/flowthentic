@@ -17,45 +17,55 @@ const PersonalInfo: React.FC = () => {
   const { name, email } = verificationState;
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.text}>Please fill out your personal details.</Text>
-      <Text style={styles.text}>
-        This information is crucial to ensure the unique identification of each
-        user and will be used for the purpose of identity verification.
-      </Text>
+    <View style={styles.container}>
+      <ScrollView>
+        <View>
+          <Text style={styles.text}>
+            Please fill out your personal details.
+          </Text>
+          <Text style={styles.text}>
+            This information is crucial to ensure the unique identification of
+            each user and will be used for the purpose of identity verification.
+          </Text>
+        </View>
 
-      <View style={styles.fields}>
-        <Input
-          label="Name"
-          value={name}
-          onChangeText={(value) =>
-            setVerificationState((state) => ({ ...state, name: value }))
-          }
-          style={styles.input}
-        />
-        <Input
-          label="Email"
-          value={email}
-          onChangeText={(value) =>
-            setVerificationState((state) => ({ ...state, email: value }))
-          }
-          keyboardType="email-address"
-          style={styles.input}
-        />
+        <View style={styles.fields}>
+          <Input
+            label="Name"
+            value={name}
+            onChangeText={(value) =>
+              setVerificationState((state) => ({ ...state, name: value }))
+            }
+            style={styles.input}
+          />
+          <Input
+            label="Email"
+            value={email}
+            onChangeText={(value) =>
+              setVerificationState((state) => ({ ...state, email: value }))
+            }
+            keyboardType="email-address"
+            style={styles.input}
+          />
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button
+          disabled={!name || !email}
+          style={styles.button}
+          onPress={() => setCurrentStep(currentStep + 1)}
+        >
+          Next
+        </Button>
       </View>
-      <Button
-        disabled={!name || !email}
-        style={styles.button}
-        onPress={() => setCurrentStep(currentStep + 1)}
-      >
-        Next
-      </Button>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    height: "100%",
+    flex: 1,
     paddingTop: 20,
   },
   text: {
@@ -69,6 +79,9 @@ const styles = StyleSheet.create({
   },
   input: {
     color: "white",
+  },
+  buttonContainer: {
+    paddingVertical: 10,
   },
   button: {
     marginTop: 30,

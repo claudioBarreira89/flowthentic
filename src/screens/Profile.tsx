@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { colors } from "../styles/theme";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function Profile() {
+  const headerHeight = useHeaderHeight();
   const [userName, setUserName] = useState("User Name");
   const [userAddress, setUserAddress] = useState("FLOW-123-ABC");
 
@@ -13,7 +22,14 @@ export default function Profile() {
   function logout() {}
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{
+        paddingTop: headerHeight,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Text style={styles.title}>Profile Screen</Text>
 
       <Text style={styles.userName}>{userName}</Text>
@@ -35,17 +51,16 @@ export default function Profile() {
       {/* Contact or support information goes here */}
 
       <Button title="Log Out" onPress={logout} />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: { flex: 1 },
   container: {
     padding: 15,
     backgroundColor: colors.background,
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   title: {
     fontSize: 20,

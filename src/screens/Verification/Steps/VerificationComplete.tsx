@@ -11,30 +11,33 @@ const VerificationComplete: React.FC = () => {
   const { setCurrentStep } = useVerificationState();
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.image}>
-        <SuccessIllustration />
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.image}>
+          <SuccessIllustration />
+        </View>
+        <View>
+          <Text style={styles.text}>
+            You're now verified on-chain, affirming your unique identity in the
+            blockchain world. Embrace the decentralized future!
+          </Text>
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={() => {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "Profile" }],
+              })
+            );
+          }}
+        >
+          Done
+        </Button>
       </View>
-      <View>
-        <Text style={styles.text}>
-          You're now verified on-chain, affirming your unique identity in the
-          blockchain world. Embrace the decentralized future!
-        </Text>
-      </View>
-
-      <Button
-        onPress={() => {
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [{ name: "Profile" }],
-            })
-          );
-        }}
-      >
-        Done
-      </Button>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -59,6 +62,9 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 80,
     color: "white",
+  },
+  buttonContainer: {
+    paddingVertical: 10,
   },
   button: {
     alignSelf: "center",

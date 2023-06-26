@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, ScrollView } from "react-native";
+import { Text, StyleSheet, View, ScrollView, SafeAreaView } from "react-native";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { Button } from "../ui";
 import { colors } from "../styles/theme";
@@ -9,50 +9,48 @@ export default function StartVerification({ navigation }) {
   const headerHeight = useHeaderHeight();
 
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-      }}
-    >
-      <View style={styles.container}>
-        <View style={styles.hero}>
-          <Text style={styles.title}>Flowthentic</Text>
-          <Text style={styles.subTitle}>
-            Decentralized Identity Verification
-          </Text>
-        </View>
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingTop: headerHeight,
+        }}
+      >
+        <View>
+          <View style={styles.hero}>
+            <Text style={styles.title}>Flowthentic</Text>
+            <Text style={styles.subTitle}>
+              Decentralized Identity Verification
+            </Text>
+          </View>
 
-        <View style={styles.verificationStatus}>
-          <View style={{ height: 200, marginBottom: 60 }}>
-            <IdentityIllustration color={colors.primary} />
+          <View style={styles.verificationStatus}>
+            <View style={{ height: 200, marginBottom: 60 }}>
+              <IdentityIllustration color={colors.primary} />
+            </View>
           </View>
         </View>
-
-        <View style={styles.startButton}>
-          <Text style={styles.text}>
-            Embrace the future of secure digital identity. Click below to begin
-            your journey
-          </Text>
-          <Button onPress={() => navigation.navigate("Verification")}>
-            <Text style={styles.buttonText}>Start your verification here!</Text>
-          </Button>
-        </View>
+      </ScrollView>
+      <View style={styles.startButton}>
+        <Text style={styles.text}>
+          Embrace the future of secure digital identity. Click below to begin
+          your journey
+        </Text>
+        <Button onPress={() => navigation.navigate("Verification")}>
+          <Text style={styles.buttonText}>Start your verification here!</Text>
+        </Button>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  container: {
     height: "100%",
     backgroundColor: colors.background,
     padding: 20,
+    paddingBottom: 40,
     flex: 1,
     flexDirection: "column",
-  },
-  container: {
-    height: "100%",
   },
   // HERO
   hero: {
@@ -78,9 +76,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 20,
   },
-
-  startButton: {},
-
+  startButton: {
+    paddingVertical: 10,
+  },
   text: {
     fontSize: 16,
     lineHeight: 22,

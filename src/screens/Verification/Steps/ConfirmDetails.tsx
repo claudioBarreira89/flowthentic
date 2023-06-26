@@ -36,42 +36,46 @@ const ConfirmDetails: React.FC<any> = ({ user }) => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Please confirm your details</Text>
+    <View style={styles.container}>
+      <ScrollView>
+        <Text style={styles.title}>Please confirm your details</Text>
 
-      <View style={styles.details}>
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>Name:</Text>
-          <Text style={styles.value}>{name}</Text>
-        </View>
-        {/* 
+        <View style={styles.details}>
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>Name:</Text>
+            <Text style={styles.value}>{name}</Text>
+          </View>
+          {/* 
         <View style={styles.detailItem}>
           <Text style={styles.label}>Birth Date:</Text>
           <Text style={styles.value}>{birthDate}</Text>
         </View> */}
 
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>{email}</Text>
-        </View>
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>Email:</Text>
+            <Text style={styles.value}>{email}</Text>
+          </View>
 
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>Selfie:</Text>
-          {image ? (
-            <Image source={{ uri: image }} style={styles.image} />
-          ) : (
-            <Text style={styles.noImage}>No image selected</Text>
-          )}
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>Selfie:</Text>
+            {image ? (
+              <Image source={{ uri: image }} style={styles.image} />
+            ) : (
+              <Text style={styles.noImage}>No image selected</Text>
+            )}
+          </View>
         </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button onPress={onConfirm}>Confirm and Proceed</Button>
       </View>
-
-      <Button onPress={onConfirm}>Confirm and Proceed</Button>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: 20,
   },
   title: {
@@ -112,6 +116,9 @@ const styles = StyleSheet.create({
   noImage: {
     marginTop: 10,
     color: "#999",
+  },
+  buttonContainer: {
+    paddingVertical: 10,
   },
 });
 export default ConfirmDetails;

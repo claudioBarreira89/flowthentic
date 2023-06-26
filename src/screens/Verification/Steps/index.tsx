@@ -25,7 +25,7 @@ const Steps: React.FC = () => {
   const steps: Steps[] = [
     { title: "Personal information", Component: PersonalInfo },
     // { title: "Email verification", Component: EmailVerification },
-    // { title: "Face Idenfitication", Component: FaceIdentification },
+    { title: "Face Idenfitication", Component: FaceIdentification },
     { title: "Confirm details", Component: ConfirmDetails },
     { title: "Verification complete", Component: VerificationComplete },
   ];
@@ -59,8 +59,11 @@ const Steps: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    height: "100%",
+    padding: 20,
+    paddingBottom: 40,
     flex: 1,
-    padding: 16,
+    flexDirection: "column",
   },
   title: {
     fontSize: 26,
