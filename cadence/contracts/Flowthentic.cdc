@@ -1,21 +1,21 @@
 pub contract Flowthentic {
   // Store a record of users who have been verified
-  // access(account) var verifiedUsers: {String: String}
-  pub var verifiedUsers: {String: String}
+  pub let verifiedUsers: {String: {String: String}}
 
   init() {
-      self.verifiedUsers = {}
+    self.verifiedUsers = {}
   }
 
-  // Function to store a user's hashed personal data
-  pub fun setHashedData(userId: String, hashedData: String) {
-      self.verifiedUsers[userId] = hashedData
+  pub fun setUserData(userId: String, hashedData: String, encryptedImage: String) {
+    self.verifiedUsers[userId] = {
+      "hashedData": hashedData,
+      "encryptedImage": encryptedImage
+    }
   }
 
-  // Function to retrieve a user's hashed personal data
-  pub fun getHashedData(userId: String): String? {
-    if let hashedData = self.verifiedUsers[userId] {
-        return hashedData
+  pub fun getUserData(userId: String): {String: String}? {
+    if let userData = self.verifiedUsers[userId] {
+      return userData
     }
     return nil
   }

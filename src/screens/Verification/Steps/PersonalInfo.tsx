@@ -1,8 +1,6 @@
 import { Button } from "../../../ui";
 import { useVerificationState } from "../VerificationContext";
-
 import { ScrollView, StyleSheet, View } from "react-native";
-import { useState } from "react";
 import { Input } from "@rneui/base";
 import { Text } from "react-native";
 

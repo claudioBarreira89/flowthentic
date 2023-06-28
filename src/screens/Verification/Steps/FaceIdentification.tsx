@@ -1,68 +1,128 @@
-import { Button } from "../../../ui";
+import { Button, LoadingIndicator } from "../../../ui";
 import { useVerificationState } from "../VerificationContext";
-
-import { ScrollView, StyleSheet, View, Image } from "react-native";
-import { useState } from "react";
+import { Camera } from "expo-camera";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import { Text } from "react-native";
+import { postFaceDetection, encryptData } from "../../../api";
+import * as FileSystem from "expo-file-system";
+import { resizeImage } from "../../../utils";
+
+let camera: Camera;
+
+async function getCameraPermission() {
+  const { status } = await Camera.requestCameraPermissionsAsync();
+  if (status !== "granted") {
+    alert("Sorry, we need camera permissions to make this work!");
+    return false;
+  }
+  return true;
+}
 
 const FaceIdentification: React.FC = () => {
-  const { currentStep, setCurrentStep } = useVerificationState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
 
-  const [image, setImage] = useState(null);
+  const {
+    currentStep,
+    setCurrentStep,
+    verificationState,
+    setVerificationState,
+  } = useVerificationState();
 
-  const handleCaptureImage = () => {
-    // Here you can handle the image capturing logic,
-    // for example, open the camera, capture the image, and store the image URI.
+  const handleCaptureImage = async () => {
+    setIsLoading(true);
+    const photo: any = await camera.takePictureAsync();
+
+    const resizedImage = await resizeImage(photo);
+
+    const base64 = await FileSystem.readAsStringAsync(resizedImage.uri, {
+      encoding: "base64",
+    });
+
+    const response = await postFaceDetection({ image: base64 });
+
+    setIsLoading(false);
+
+    if (response.data.length) {
+      if (response.data[0].faceRectangle) {
+        setVerificationState({ ...verificationState, image: base64 });
+        setCurrentStep(currentStep + 1);
+      }
+    }
   };
 
-  const handleUploadImage = () => {
-    // Here you can handle the image uploading logic,
-    // for example, open the file picker, select the image, and store the image URI.
+  const startCameraFn = async () => {
+    const hasPermission = await getCameraPermission();
+    setHasPermission(hasPermission);
   };
+
+  useEffect(() => {
+    startCameraFn();
+  }, []);
+
+  if (hasPermission === null) {
+    return <View style={styles.container} />;
+  }
+
+  if (hasPermission === false) {
+    return (
+      <View style={styles.container}>
+        <Text>No access to camera</Text>;
+      </View>
+    );
+  }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.text}>Please take or upload a clear selfie.</Text>
-      <Text style={styles.text}>
-        This image will be used for facial recognition verification.
-      </Text>
+    <View style={styles.container}>
+      <ScrollView>
+        <Text style={styles.text}>Please take or upload a clear selfie.</Text>
+        <Text style={styles.text}>
+          This image will be used for facial recognition verification.
+        </Text>
 
-      <View style={styles.imageContainer}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
-        ) : (
-          <Text>No image selected</Text>
-        )}
+        <View style={styles.imageContainer}>
+          <CameraComponent />
+        </View>
+        <View style={{ padding: 20 }}>{isLoading && <LoadingIndicator />}</View>
+      </ScrollView>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          disabled={isLoading}
+          // onPress={() => setCurrentStep(currentStep + 1)}
+          onPress={handleCaptureImage}
+        >
+          Capture photo
+        </Button>
       </View>
-
-      <Button
-        type="secondary"
-        style={styles.photoButton}
-        onPress={handleCaptureImage}
-      >
-        Capture Selfie
-      </Button>
-
-      <Button
-        type="secondary"
-        style={styles.photoButton}
-        onPress={handleUploadImage}
-      >
-        Upload Selfie
-      </Button>
-
-      <Button
-        style={styles.button}
-        onPress={() => setCurrentStep(currentStep + 1)}
-      >
-        Next
-      </Button>
-    </ScrollView>
+    </View>
   );
 };
 
+const CameraComponent = ({ type }: any) => (
+  <Camera
+    style={{ flex: 1 }}
+    // @ts-ignore
+    type={Camera.Constants.Type.front}
+    ref={(r) => {
+      camera = r;
+    }}
+  >
+    <View
+      style={{
+        flex: 1,
+        width: "100%",
+        backgroundColor: "transparent",
+        flexDirection: "row",
+      }}
+    ></View>
+  </Camera>
+);
+
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: 20,
   },
   text: {
@@ -72,12 +132,10 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   imageContainer: {
-    height: 200,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-    borderColor: "gray",
-    borderWidth: 1,
+    height: 300,
+    marginTop: 20,
+    borderRadius: 30,
+    overflow: "hidden",
   },
   image: {
     width: "100%",
@@ -86,8 +144,8 @@ const styles = StyleSheet.create({
   photoButton: {
     marginTop: 15,
   },
-  button: {
-    marginTop: 40,
+  buttonContainer: {
+    paddingVertical: 10,
   },
 });
 

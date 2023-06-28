@@ -4,7 +4,7 @@ type VerificationState = {
   name: string;
   birthDate: Date;
   email: string;
-  image: string; // Base64-encoded image
+  image: string;
 };
 
 const VerificationContext = createContext<{

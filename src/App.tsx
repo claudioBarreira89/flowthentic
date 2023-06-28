@@ -11,7 +11,7 @@ import UserAccountButton from "./components/UserAccountButton";
 import Verification from "./screens/Verification";
 import Profile from "./screens/Profile";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
-import getHashedData from "../cadence/scripts/get-hashed-data.cdc";
+import getUserData from "../cadence/scripts/get-user-data.cdc";
 import LoadingScreen from "./components/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
@@ -25,7 +25,7 @@ export default function App() {
     try {
       setIsLoading(true);
       const verification = await fcl.query({
-        cadence: getHashedData,
+        cadence: getUserData,
         args: (arg, t) => [arg(addr, t.String)],
       });
       console.log({ verification });

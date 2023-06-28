@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Button,
-  Image,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { colors } from "../styles/theme";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { Button } from "../ui";
+import * as fcl from "@onflow/fcl/dist/fcl-react-native";
 
 export default function Profile() {
   const headerHeight = useHeaderHeight();
@@ -22,36 +17,30 @@ export default function Profile() {
   function logout() {}
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{
-        paddingTop: headerHeight,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={styles.title}>Profile Screen</Text>
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingTop: headerHeight,
+        }}
+      >
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Hey there 👋🏻</Text>
+          <Text style={styles.title}>You are an authentic user!</Text>
+        </View>
 
-      <Text style={styles.userName}>{userName}</Text>
-      <Button title="Edit User Name" onPress={editUserName} />
-
-      <Text style={styles.address}>Address: {userAddress}</Text>
-      <Button title="Verify Address" onPress={verifyAddress} />
-
-      <Text style={styles.sectionTitle}>Activity History</Text>
-      {/* Display user's activity history here */}
-
-      <Text style={styles.sectionTitle}>Notifications</Text>
-      {/* Display notifications here */}
-
-      <Text style={styles.sectionTitle}>Security Settings</Text>
-      {/* Security settings options go here */}
-
-      <Text style={styles.sectionTitle}>Contact or Support</Text>
-      {/* Contact or support information goes here */}
-
-      <Button title="Log Out" onPress={logout} />
-    </ScrollView>
+        <View style={styles.section}>
+          <Button>Check personal data</Button>
+        </View>
+        <View style={styles.section}>
+          <Button>Verify address authenticity</Button>
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button type="secondary" onPress={() => fcl.unauthenticate()}>
+          Disconnect wallet
+        </Button>
+      </View>
+    </View>
   );
 }
 
@@ -62,10 +51,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     flex: 1,
   },
+  titleContainer: {
+    marginBottom: 40,
+  },
   title: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
+    fontSize: 28,
+    marginBottom: 10,
+    color: "white",
   },
   image: {
     width: 100,
@@ -86,5 +78,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     margin: 10,
+  },
+  buttonContainer: {
+    paddingVertical: 10,
+  },
+  section: {
+    flex: 1,
+    width: "100%",
+    marginTop: 10,
   },
 });

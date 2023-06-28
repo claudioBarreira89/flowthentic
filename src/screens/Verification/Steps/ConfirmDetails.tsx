@@ -5,7 +5,8 @@ import sha256 from "crypto-js/sha256";
 import { ScrollView, StyleSheet, View, Image } from "react-native";
 import { Text } from "react-native";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
-import setHashedData from "../../../../cadence/transactions/set-hashed-data.cdc";
+import setUserData from "../../../../cadence/transactions/set-user-data-1.cdc";
+import { encryptData } from "../../../api";
 
 const ConfirmDetails: React.FC<any> = ({ user }) => {
   const { currentStep, setCurrentStep, verificationState } =
@@ -19,12 +20,15 @@ const ConfirmDetails: React.FC<any> = ({ user }) => {
     const userDataString = JSON.stringify(userData);
     const userDataHash = sha256(userDataString).toString();
 
+    const { data: encryptedImage } = await encryptData(image);
+
     try {
       await fcl.mutate({
-        cadence: setHashedData,
+        cadence: setUserData,
         args: (arg, t) => [
           arg(user.address, t.String),
           arg(userDataHash, t.String),
+          arg(encryptedImage, t.String),
         ],
         limit: 999,
       });
@@ -57,12 +61,13 @@ const ConfirmDetails: React.FC<any> = ({ user }) => {
           </View>
 
           <View style={styles.detailItem}>
-            <Text style={styles.label}>Selfie:</Text>
-            {image ? (
-              <Image source={{ uri: image }} style={styles.image} />
-            ) : (
-              <Text style={styles.noImage}>No image selected</Text>
-            )}
+            <Text style={styles.label}>Image:</Text>
+            <Image
+              source={{
+                uri: `data:image/jpeg;base64,${image}`,
+              }}
+              style={{ width: 100, height: 100 }}
+            />
           </View>
         </View>
       </ScrollView>

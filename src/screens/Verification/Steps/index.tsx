@@ -1,9 +1,8 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { ProgressBar } from "react-native-paper";
 import { useVerificationState } from "../VerificationContext";
 import PersonalInfo from "./PersonalInfo";
-import EmailVerification from "./EmailVerification";
 import FaceIdentification from "./FaceIdentification";
 import ConfirmDetails from "./ConfirmDetails";
 import VerificationComplete from "./VerificationComplete";
@@ -24,7 +23,6 @@ const Steps: React.FC = () => {
 
   const steps: Steps[] = [
     { title: "Personal information", Component: PersonalInfo },
-    // { title: "Email verification", Component: EmailVerification },
     { title: "Face Idenfitication", Component: FaceIdentification },
     { title: "Confirm details", Component: ConfirmDetails },
     { title: "Verification complete", Component: VerificationComplete },
