@@ -1,46 +1,56 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import { colors } from "../styles/theme";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Button } from "../ui";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
+import ValidationModal from "../components/ValidationModal";
 
-export default function Profile() {
+export default function Profile({ navigation }) {
   const headerHeight = useHeaderHeight();
   const [userName, setUserName] = useState("User Name");
   const [userAddress, setUserAddress] = useState("FLOW-123-ABC");
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   function verifyAddress() {}
 
-  function editUserName() {}
+  const checkPersonalData = useCallback(() => {
+    setModalOpen(true);
 
-  function logout() {}
+    // navigation.navigate("PersonalData")
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={{
-          paddingTop: headerHeight,
-        }}
-      >
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Hey there 👋🏻</Text>
-          <Text style={styles.title}>You are an authentic user!</Text>
-        </View>
+    <>
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingTop: headerHeight,
+          }}
+        >
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Hey there 👋🏻</Text>
+            <Text style={styles.title}>You are an authentic user!</Text>
+          </View>
 
-        <View style={styles.section}>
-          <Button>Check personal data</Button>
+          <View style={styles.section}>
+            <Button onPress={checkPersonalData}>Check personal data</Button>
+          </View>
+          <View style={styles.section}>
+            <Button onPress={() => navigation.navigate("VerifyAddress")}>
+              Verify address authenticity
+            </Button>
+          </View>
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <Button type="secondary" onPress={() => fcl.unauthenticate()}>
+            Disconnect wallet
+          </Button>
         </View>
-        <View style={styles.section}>
-          <Button>Verify address authenticity</Button>
-        </View>
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <Button type="secondary" onPress={() => fcl.unauthenticate()}>
-          Disconnect wallet
-        </Button>
       </View>
-    </View>
+      <ValidationModal open={modalOpen} setOpen={setModalOpen} />
+    </>
   );
 }
 

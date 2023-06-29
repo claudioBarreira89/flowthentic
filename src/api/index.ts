@@ -9,10 +9,6 @@ const serverUrl = `http://${devHost}:9000/api`;
 
 export const postFaceDetection = async (data) => {
   try {
-    // const base64 = await FileSystem.readAsStringAsync(data.image, {
-    //   encoding: "base64",
-    // });
-
     const response = await axios.post(serverUrl + "/face/detect", {
       image: data.image,
     });
@@ -23,8 +19,29 @@ export const postFaceDetection = async (data) => {
   }
 };
 
+export const postFaceVerification = async (data) => {
+  try {
+    const response = await axios.post(serverUrl + "/face/compare", {
+      image1: data.image1,
+      image2: data.image2,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const encryptData = async (data) => {
   const response = await axios.post(serverUrl + "/encrypt", {
+    data,
+  });
+
+  return response.data;
+};
+
+export const decryptData = async (data) => {
+  const response = await axios.post(serverUrl + "/decrypt", {
     data,
   });
 

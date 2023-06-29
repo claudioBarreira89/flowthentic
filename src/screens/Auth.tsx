@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
 import { LoadingIndicator } from "../ui";
 import NoWalletsView from "../components/NoWalletsView";
@@ -6,9 +6,6 @@ import WalletServiceCard from "../components/WalletServiceCard";
 import WalletDiscoveryWrapper from "../components/WalletDiscoveryWrapper";
 import { Logo } from "../../assets";
 import { colors } from "../styles/theme";
-import { useNavigation } from "@react-navigation/native";
-import { useCurrentUser } from "../hooks/useCurrentUser";
-import { useEffect } from "react";
 
 export default function Auth({ navigation }) {
   return (

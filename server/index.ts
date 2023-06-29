@@ -21,6 +21,19 @@ const azureInstanceOptions = {
   },
 };
 
+const faceVerificationApiKey = process.env.FACE_VERIFICATION_API_KEY;
+const faceVerificationApiHost = process.env.FACE_VERIFICATION_API_HOST;
+const faceVerificationApiEndpoint = process.env.FACE_VERIFICATION_API_ENDPOINT;
+
+const rapidApiInstanceOptions = {
+  baseURL: faceVerificationApiEndpoint,
+  headers: {
+    "content-type": "application/x-www-form-urlencoded",
+    "X-RapidAPI-Key": faceVerificationApiKey,
+    "X-RapidAPI-Host": faceVerificationApiHost,
+  },
+};
+
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(bodyParser.json({ limit: "50mb" }));
 
@@ -43,7 +56,26 @@ app.post("/api/face/detect", async (req, res) => {
   }
 });
 
-app.post("/api/face/compare", () => {});
+app.post("/api/face/compare", async (req, res) => {
+  try {
+    const instanceOptions = { ...rapidApiInstanceOptions };
+    const instance = axios.create(instanceOptions);
+    const body = req.body;
+
+    const encodedParams = new URLSearchParams();
+    encodedParams.set("image1Base64", "data:image/jpeg;base64," + body.image1);
+    encodedParams.set("image2Base64", "data:image/jpeg;base64," + body.image2);
+
+    console.log(encodedParams);
+
+    const response = await instance.post("/faceverification", encodedParams);
+
+    res.send(response.data);
+  } catch (err) {
+    console.log("error :c : ", err);
+    res.send({ response: "not ok" });
+  }
+});
 
 app.post("/api/encrypt", async (req, res) => {
   try {

@@ -15,7 +15,10 @@ const ConfirmDetails: React.FC<any> = ({ user }) => {
   const { name, birthDate, email, image } = verificationState;
 
   const onConfirm = useCallback(async () => {
-    const userData = { name, email };
+    const userData = {
+      name: name.toLocaleLowerCase(),
+      email: email.toLocaleLowerCase(),
+    };
 
     const userDataString = JSON.stringify(userData);
     const userDataHash = sha256(userDataString).toString();

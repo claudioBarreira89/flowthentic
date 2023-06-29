@@ -13,6 +13,8 @@ import Profile from "./screens/Profile";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
 import getUserData from "../cadence/scripts/get-user-data.cdc";
 import LoadingScreen from "./components/LoadingScreen";
+import PersonalData from "./screens/PersonalData";
+import VerifyAddress from "./screens/VerifyAddress";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +30,7 @@ export default function App() {
         cadence: getUserData,
         args: (arg, t) => [arg(addr, t.String)],
       });
-      console.log({ verification });
+
       if (verification) setIsVerified(true);
 
       setIsLoading(false);
@@ -69,6 +71,8 @@ export default function App() {
                 </>
               )}
               <Stack.Screen name="Profile" component={Profile} />
+              <Stack.Screen name="PersonalData" component={PersonalData} />
+              <Stack.Screen name="VerifyAddress" component={VerifyAddress} />
             </>
           ) : (
             <>
