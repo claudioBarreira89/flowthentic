@@ -120,4 +120,4 @@ The successful completion of this project was possible thanks to the support of 
 
 - **Flow Team and Community:** Their support and great dev tooling were essential. Their commitment to provide an easier environment for developers is greatly appreciated.
 
-- **Azure and RapidAPI - PresentID:** The availability of their facial recognition/detection APIs were invaluable given the concept behing this project. These services played a crucial role and for that, I am deeply grateful.
+- **Azure and RapidAPI - PresentID:** The availability of their facial recognition/detection APIs were invaluable given the concept behind this project. These services played a crucial role and for that, I am deeply grateful.
