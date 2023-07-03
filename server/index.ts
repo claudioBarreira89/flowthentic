@@ -16,7 +16,6 @@ const azureInstanceOptions = {
   timeout: 50000,
   headers: {
     "Content-Type": "application/octet-stream",
-    // "Content-Type": "application/json",
     "Ocp-Apim-Subscription-Key": faceApiKey,
   },
 };
@@ -43,7 +42,6 @@ app.post("/api/face/detect", async (req, res) => {
     const instance = axios.create(instanceOptions);
     const body = req.body;
 
-    // URL with all the params for Azure
     const response = await instance.post("/detect", decode(body.image));
 
     res.send({
@@ -65,8 +63,6 @@ app.post("/api/face/compare", async (req, res) => {
     const encodedParams = new URLSearchParams();
     encodedParams.set("image1Base64", "data:image/jpeg;base64," + body.image1);
     encodedParams.set("image2Base64", "data:image/jpeg;base64," + body.image2);
-
-    console.log(encodedParams);
 
     const response = await instance.post("/faceverification", encodedParams);
 
