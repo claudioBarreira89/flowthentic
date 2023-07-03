@@ -5,14 +5,14 @@ import sha256 from "crypto-js/sha256";
 import { ScrollView, StyleSheet, View, Image } from "react-native";
 import { Text } from "react-native";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
-import setUserData from "../../../../cadence/transactions/set-user-data-1.cdc";
+import setUserData from "../../../../cadence/transactions/set-user-data.cdc";
 import { encryptData } from "../../../api";
 
 const ConfirmDetails: React.FC<any> = ({ user }) => {
   const { currentStep, setCurrentStep, verificationState } =
     useVerificationState();
 
-  const { name, birthDate, email, image } = verificationState;
+  const { name, email, image } = verificationState;
 
   const onConfirm = useCallback(async () => {
     const userData = {
@@ -38,7 +38,7 @@ const ConfirmDetails: React.FC<any> = ({ user }) => {
 
       setCurrentStep(currentStep + 1);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
 
@@ -52,11 +52,6 @@ const ConfirmDetails: React.FC<any> = ({ user }) => {
             <Text style={styles.label}>Name:</Text>
             <Text style={styles.value}>{name}</Text>
           </View>
-          {/* 
-        <View style={styles.detailItem}>
-          <Text style={styles.label}>Birth Date:</Text>
-          <Text style={styles.value}>{birthDate}</Text>
-        </View> */}
 
           <View style={styles.detailItem}>
             <Text style={styles.label}>Email:</Text>

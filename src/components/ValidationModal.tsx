@@ -6,11 +6,11 @@ import * as fcl from "@onflow/fcl/dist/fcl-react-native";
 import getUserData from "../../cadence/scripts/get-user-data.cdc";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import sha256 from "crypto-js/sha256";
-import { Camera } from "expo-camera";
 import { resizeImage } from "../utils";
 import * as FileSystem from "expo-file-system";
 import { decryptData, postFaceVerification } from "../api";
 import { useNavigation } from "@react-navigation/native";
+import CameraComponent from "./CameraComponent";
 
 export default function ValidationModal({
   open,
@@ -176,28 +176,6 @@ export default function ValidationModal({
   );
 }
 
-const CameraComponent = ({ type, cameraRef }: any) => {
-  return (
-    <View style={styles.imageContainer}>
-      <Camera
-        style={{ flex: 1 }}
-        // @ts-ignore
-        type={Camera.Constants.Type.front}
-        ref={cameraRef}
-      >
-        <View
-          style={{
-            flex: 1,
-            width: "100%",
-            backgroundColor: "transparent",
-            flexDirection: "row",
-          }}
-        ></View>
-      </Camera>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
@@ -231,12 +209,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  imageContainer: {
-    height: 300,
-    marginTop: 20,
-    borderRadius: 30,
-    overflow: "hidden",
-  },
   text: {
     fontSize: 14,
     fontWeight: "bold",
@@ -257,8 +229,5 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 40,
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
   },
 });

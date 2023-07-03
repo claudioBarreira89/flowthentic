@@ -14,9 +14,16 @@ pub contract Flowthentic {
   }
 
   pub fun getUserData(userId: String): {String: String}? {
-    if let userData = self.verifiedUsers[userId] {
+    if let userData: {String: String} = self.verifiedUsers[userId] {
       return userData
     }
     return nil
+  }
+
+  pub fun verifyAddress(address: String): Bool? {
+    if let userData: {String: String} = self.verifiedUsers[address] {
+      return true
+    }
+    return false
   }
 }

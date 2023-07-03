@@ -5,20 +5,20 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { Button } from "../ui";
 import * as fcl from "@onflow/fcl/dist/fcl-react-native";
 import ValidationModal from "../components/ValidationModal";
+import VerifyAddressModal from "../components/VerifyAddressModal";
 
-export default function Profile({ navigation }) {
+export default function Profile() {
   const headerHeight = useHeaderHeight();
-  const [userName, setUserName] = useState("User Name");
-  const [userAddress, setUserAddress] = useState("FLOW-123-ABC");
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [verifyAddressModalOpen, setVerifyAddressModalOpen] = useState(false);
 
-  function verifyAddress() {}
+  const verifyAddress = useCallback(() => {
+    setVerifyAddressModalOpen(true);
+  }, []);
 
   const checkPersonalData = useCallback(() => {
     setModalOpen(true);
-
-    // navigation.navigate("PersonalData")
   }, []);
 
   return (
@@ -38,9 +38,7 @@ export default function Profile({ navigation }) {
             <Button onPress={checkPersonalData}>Check personal data</Button>
           </View>
           <View style={styles.section}>
-            <Button onPress={() => navigation.navigate("VerifyAddress")}>
-              Verify address authenticity
-            </Button>
+            <Button onPress={verifyAddress}>Verify address authenticity</Button>
           </View>
         </ScrollView>
         <View style={styles.buttonContainer}>
@@ -50,6 +48,10 @@ export default function Profile({ navigation }) {
         </View>
       </View>
       <ValidationModal open={modalOpen} setOpen={setModalOpen} />
+      <VerifyAddressModal
+        open={verifyAddressModalOpen}
+        setOpen={setVerifyAddressModalOpen}
+      />
     </>
   );
 }
