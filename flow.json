@@ -1,7 +1,6 @@
 {
 	"contracts": {
-		"Flowthentic": "cadence/contracts/Flowthentic.cdc",
-		"HelloWorld": "cadence/contracts/HelloWorld.cdc"
+		"Flowthentic": "cadence/contracts/Flowthentic.cdc"
 	},
 	"networks": {
 		"emulator": "localhost:3569",
@@ -25,8 +24,7 @@
 	"deployments": {
 		"emulator": {
 			"default": [
-				"Flowthentic",
-				"HelloWorld"
+				"Flowthentic"
 			]
 		}
 	}
